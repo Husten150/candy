@@ -758,11 +758,24 @@
         function processPaymentToAugustine(amount, customerInfo) {
             // Paystack configuration for real payment processing
             const paystackConfig = {
-                key: 'pk_test_1234567890abcdef', // Replace with your actual Paystack public key
-                email: customerInfo.email || 'customer@example.com',
+                key: 'pk_test_7e5f4c088de3a0eeaf8f7825e78db908636a0549', // Your Paystack test public key
+                email: customerInfo.email || 'hustenisama@gmail.com',
                 amount: amount * 100, // Convert to kobo (Paystack uses kobo)
                 currency: 'NGN',
                 ref: 'CANDY_' + Date.now(),
+                metadata: {
+                    custom_fields: [
+                        {
+                            display_name: "Candy's Kitchen",
+                            variable_name: "candys_kitchen",
+                            value: "Order Payment"
+                        }
+                    ],
+                    business_name: "Candy's Kitchen",
+                    settlement_bank: "058", // GTBank code
+                    account_number: "0672546973",
+                    account_name: "Augustine Isama"
+                },
                 callback: function(response) {
                     // Payment successful - process to Augustine's GTBank account
                     verifyPaymentAndSettle(response, amount, customerInfo);
