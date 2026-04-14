@@ -568,8 +568,8 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 font-semibold mb-2" for="card-number">Card Number</label>
-                                            <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456 789" 
-                                                   maxlength="23" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                            <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" 
+                                                   maxlength="19" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
                                         </div>
                                     </div>
                                     
@@ -954,7 +954,7 @@
                 return;
             }
             
-            const total = parseFloat(document.getElementById('total').textContent.replace('NGN', '').replace('N', '').replace(',', ''));
+            const total = parseFloat(document.getElementById('total').textContent.replace(/[^\d.]/g, ''));
             
             if (payment === 'card') {
                 // Validate payment form
@@ -970,10 +970,10 @@
                     return;
                 }
                 
-                // Validate card number (exactly 19 digits)
+                // Validate card number (16 or 19 digits)
                 const cleanCardNumber = cardNumber.replace(/\s/g, '');
-                if (cleanCardNumber.length !== 19 || !/^\d+$/.test(cleanCardNumber)) {
-                    alert('Please enter a valid 19-digit card number');
+                if ((cleanCardNumber.length !== 16 && cleanCardNumber.length !== 19) || !/^\d+$/.test(cleanCardNumber)) {
+                    alert('Please enter a valid 16 or 19-digit card number');
                     return;
                 }
                 
