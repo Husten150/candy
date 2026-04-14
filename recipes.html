@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes - Candy's Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), 
+                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80') center/cover;
+            position: relative;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(243, 123, 12, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .recipe-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .recipe-background {
+            background: linear-gradient(rgba(243, 221, 25, 0.95), rgba(156, 233, 14, 0.95)), 
+                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80') center/cover;
+            position: relative;
+        }
+        
+        .recipe-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+        }
+        
+        .recipe-content {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="logo-font text-2xl font-bold text-purple-600">Candy's Kitchen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Home</a>
+                    <div class="dropdown">
+                        <a href="menu.html" class="text-gray-700 hover:text-purple-600 transition duration-300 flex items-center">
+                            Menu <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="menu.html#mains">Main Dishes</a>
+                            <a href="desserts.html">Desserts</a>
+                            <a href="menu.html#drinks">Drinks</a>
+                            <a href="menu.html#all">All Items</a>
+                        </div>
+                    </div>
+                    <a href="recipes.html" class="text-purple-600 font-semibold">Recipes</a>
+                    <a href="index.html#about" class="text-gray-700 hover:text-purple-600 transition duration-300">About</a>
+                    <a href="index.html#contact" class="text-gray-700 hover:text-purple-600 transition duration-300">Contact</a>
+                    <a href="order.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Order
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" style="display: none;">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Home</a>
+                <div class="mobile-dropdown-toggle">
+                    <a href="menu.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600 flex items-center justify-between">
+                        Menu <i class="fas fa-chevron-down text-xs"></i>
+                    </a>
+                    <div class="mobile-dropdown">
+                        <a href="menu.html#mains" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Main Dishes</a>
+                        <a href="desserts.html" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Desserts</a>
+                        <a href="menu.html#drinks" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Drinks</a>
+                        <a href="menu.html#all" class="block px-3 py-2 text-gray-600 hover:text-purple-600">All Items</a>
+                    </div>
+                </div>
+                <a href="recipes.html" class="block px-3 py-2 text-purple-600 font-semibold">Recipes</a>
+                <a href="index.html#about" class="block px-3 py-2 text-gray-700 hover:text-purple-600">About</a>
+                <a href="index.html#contact" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Contact</a>
+                <a href="order.html" class="block px-3 py-2 text-purple-600 font-semibold">Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-content">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-shadow">Our Secret Recipes</h1>
+                <p class="text-xl mb-8 text-shadow">Learn how to make our delicious dishes at home</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="py-16 recipe-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 recipe-content">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Featured Recipes</h2>
+                <p class="text-xl text-gray-600">Step-by-step guides to recreate our kitchen favorites</p>
+            </div>
+
+            <!-- Recipe Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Recipe 1: Grilled Chicken -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="grilled chicken.jpg" alt="Grilled Chicken Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Main Dish</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>45 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Perfect Grilled Chicken</h3>
+                        <p class="text-gray-600 mb-4">Tender juicy grilled chicken with our signature herb blend and spices</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>4 servings
+                            </span>
+                            <button onclick="showRecipeDetails('grilled-chicken')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe 2: Fried Rice -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="rice.jpg" alt="Fried Rice Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Main Dish</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>30 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Special Fried Rice</h3>
+                        <p class="text-gray-600 mb-4">Fluffy fried rice with vegetables and perfectly seasoned chicken</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>6 servings
+                            </span>
+                            <button onclick="showRecipeDetails('fried-rice')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe 3: Chips and Egg -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="chips and egg.jpg" alt="Chips and Egg Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Side Dish</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>20 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Crispy Chips & Egg</h3>
+                        <p class="text-gray-600 mb-4">Golden crispy potato chips with perfectly fried eggs and ketchup</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>2 servings
+                            </span>
+                            <button onclick="showRecipeDetails('chips-egg')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe 4: Fish Pepper Soup -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="ppp.jpg" alt="Fish Pepper Soup Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Soup</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>60 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Spicy Fish Pepper Soup</h3>
+                        <p class="text-gray-600 mb-4">Rich and flavorful fish soup with fresh peppers and spices</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>4 servings
+                            </span>
+                            <button onclick="showRecipeDetails('fish-soup')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe 5: Candy's Delight Snacks -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="ima.jpg" alt="Candy's Delight Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Snack</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>25 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Candy's Special Delight</h3>
+                        <p class="text-gray-600 mb-4">Our secret recipe for the perfect snack that brings joy</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>3 servings
+                            </span>
+                            <button onclick="showRecipeDetails('candy-delight')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipe 6: Fresh Juice -->
+                <div class="recipe-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="juice.jpg" alt="Fresh Juice Recipe" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-3">
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Beverage</span>
+                            <span class="ml-auto text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-1"></i>10 mins
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Refreshing Fruit Juice</h3>
+                        <p class="text-gray-600 mb-4">Fresh tropical fruit blend with natural sweetness</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-500 text-sm">
+                                <i class="fas fa-utensils mr-1"></i>2 servings
+                            </span>
+                            <button onclick="showRecipeDetails('fresh-juice')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                                View Recipe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipe Details Modal -->
+    <div id="recipe-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-4xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-start mb-6">
+                <h2 id="recipe-title" class="text-2xl font-bold text-gray-800"></h2>
+                <button onclick="closeRecipeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="recipe-content" class="space-y-6">
+                <!-- Recipe details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Recipe data
+        const recipes = {
+            'grilled-chicken': {
+                title: 'Perfect Grilled Chicken',
+                category: 'Main Dish',
+                time: '45 minutes',
+                servings: 4,
+                difficulty: 'Medium',
+                ingredients: [
+                    '1 kg chicken pieces',
+                    '2 tbsp olive oil',
+                    '1 tsp paprika',
+                    '1 tsp garlic powder',
+                    '1 tsp onion powder',
+                    'Salt and pepper to taste',
+                    'Fresh herbs (thyme, rosemary)'
+                ],
+                instructions: [
+                    'Clean and pat dry chicken pieces',
+                    'Mix all spices in a small bowl',
+                    'Rub spice mixture all over chicken',
+                    'Let marinate for 30 minutes',
+                    'Heat grill to medium-high heat',
+                    'Grill chicken for 6-8 minutes per side',
+                    'Rest for 5 minutes before serving',
+                    'Garnish with fresh herbs'
+                ]
+            },
+            'fried-rice': {
+                title: 'Special Fried Rice',
+                category: 'Main Dish',
+                time: '30 minutes',
+                servings: 6,
+                difficulty: 'Easy',
+                ingredients: [
+                    '3 cups cooked rice',
+                    '2 cups mixed vegetables',
+                    '1 cup chicken pieces',
+                    '3 tbsp soy sauce',
+                    '2 tbsp vegetable oil',
+                    '1 tsp garlic powder',
+                    'Salt and pepper to taste'
+                ],
+                instructions: [
+                    'Heat oil in large wok or pan',
+                    'Add chicken pieces and stir-fry for 5 minutes',
+                    'Add vegetables and stir-fry for 3 minutes',
+                    'Add cooked rice and break up clumps',
+                    'Add soy sauce and seasonings',
+                    'Stir-fry for 5 minutes until well mixed',
+                    'Serve hot with garnish'
+                ]
+            },
+            'chips-egg': {
+                title: 'Crispy Chips & Egg',
+                category: 'Side Dish',
+                time: '20 minutes',
+                servings: 2,
+                difficulty: 'Easy',
+                ingredients: [
+                    '2 large potatoes',
+                    '3 eggs',
+                    'Oil for frying',
+                    'Salt to taste',
+                    'Ketchup for serving'
+                ],
+                instructions: [
+                    'Peel and slice potatoes into thin strips',
+                    'Heat oil to medium-high heat',
+                    'Fry potatoes until golden and crispy',
+                    'Drain on paper towels',
+                    'Fry eggs in same oil',
+                    'Season chips with salt',
+                    'Serve with ketchup'
+                ]
+            },
+            'fish-soup': {
+                title: 'Spicy Fish Pepper Soup',
+                category: 'Soup',
+                time: '60 minutes',
+                servings: 4,
+                difficulty: 'Medium',
+                ingredients: [
+                    '500g fresh fish fillets',
+                    '3 cups water or fish stock',
+                    '2 scotch bonnets',
+                    '1 onion',
+                    '3 cloves garlic',
+                    '1 tbsp crayfish',
+                    'Seasonings'
+                ],
+                instructions: [
+                    'Clean and cut fish into pieces',
+                    'Blend peppers, onion, and crayfish',
+                    'Heat oil in pot and sauté blended mixture',
+                    'Add water or stock and bring to boil',
+                    'Add fish pieces and simmer for 20 minutes',
+                    'Season to taste',
+                    'Serve hot with fufu or rice'
+                ]
+            },
+            'candy-delight': {
+                title: 'Candy\'s Special Delight',
+                category: 'Snack',
+                time: '25 minutes',
+                servings: 3,
+                difficulty: 'Secret',
+                ingredients: [
+                    '2 cups flour',
+                    '1/2 cup butter',
+                    '1/4 cup sugar',
+                    '1 tsp vanilla extract',
+                    'Pinch of salt',
+                    'Oil for frying',
+                    'Special secret spices'
+                ],
+                instructions: [
+                    'Mix dry ingredients in a bowl',
+                    'Cut in cold butter until crumbly',
+                    'Add vanilla and mix gently',
+                    'Form into small balls',
+                    'Heat oil to medium heat',
+                    'Fry until golden brown',
+                    'Drain and serve warm'
+                ]
+            },
+            'fresh-juice': {
+                title: 'Refreshing Fruit Juice',
+                category: 'Beverage',
+                time: '10 minutes',
+                servings: 2,
+                difficulty: 'Easy',
+                ingredients: [
+                    '2 oranges',
+                    '1 pineapple',
+                    '1 apple',
+                    '1 cup water',
+                    'Ice cubes',
+                    'Honey (optional)'
+                ],
+                instructions: [
+                    'Wash and cut fruits into pieces',
+                    'Remove seeds from oranges',
+                    'Blend fruits with water',
+                    'Strain if desired',
+                    'Add honey to taste',
+                    'Serve over ice'
+                ]
+            }
+        };
+
+        // Show recipe details
+        function showRecipeDetails(recipeId) {
+            const recipe = recipes[recipeId];
+            if (!recipe) return;
+
+            const modal = document.getElementById('recipe-modal');
+            const title = document.getElementById('recipe-title');
+            const content = document.getElementById('recipe-content');
+
+            title.textContent = recipe.title;
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="md:col-span-2">
+                        <img src="${recipeId === 'grilled-chicken' ? 'grilled chicken.jpg' : 
+                               recipeId === 'fried-rice' ? 'rice.jpg' : 
+                               recipeId === 'chips-egg' ? 'chips and egg.jpg' : 
+                               recipeId === 'fish-soup' ? 'ppp.jpg' : 
+                               recipeId === 'candy-delight' ? 'ima.jpg' : 'juice.jpg'}" 
+                             alt="${recipe.title}" class="w-full h-64 object-cover rounded-lg">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-purple-800 mb-2">Quick Info</h3>
+                            <div class="space-y-2 text-sm">
+                                <p><i class="fas fa-clock mr-2 text-purple-600"></i><strong>Time:</strong> ${recipe.time}</p>
+                                <p><i class="fas fa-utensils mr-2 text-purple-600"></i><strong>Servings:</strong> ${recipe.servings}</p>
+                                <p><i class="fas fa-signal mr-2 text-purple-600"></i><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+                                <p><i class="fas fa-tag mr-2 text-purple-600"></i><strong>Category:</strong> ${recipe.category}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4 text-lg">Ingredients</h3>
+                        <ul class="space-y-2">
+                            ${recipe.ingredients.map(ing => `<li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-3 mt-1 text-sm"></i><span>${ing}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4 text-lg">Instructions</h3>
+                        <ol class="space-y-3">
+                            ${recipe.instructions.map((inst, index) => `<li class="flex items-start"><span class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 text-sm font-semibold">${index + 1}</span><span>${inst}</span></li>`).join('')}
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-yellow-800 mb-2"><i class="fas fa-lightbulb mr-2"></i>Pro Tips</h3>
+                    <ul class="space-y-2 text-sm text-yellow-800">
+                        <li>• Always use fresh ingredients for best results</li>
+                        <li>• Adjust seasonings according to your taste preference</li>
+                        <li>• Prepare all ingredients before starting to cook</li>
+                        <li>• Keep kitchen tools ready and organized</li>
+                    </ul>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close recipe modal
+        function closeRecipeModal() {
+            const modal = document.getElementById('recipe-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('recipe-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecipeModal();
+            }
+        });
+    </script>
+</body>
+</html>

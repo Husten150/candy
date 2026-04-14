@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Candy's Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), 
+                        url('https://images.unsplash.com/photo-1512621776950-0c1cfc0d5d3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80') center/cover;
+            position: relative;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(243, 123, 12, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .menu-background {
+            background: linear-gradient(rgba(243, 221, 25, 0.95), rgba(156, 233, 14, 0.95)), 
+                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80') center/cover;
+            position: relative;
+        }
+        
+        .menu-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1;
+        }
+        
+        .menu-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 50;
+            border-radius: 8px;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+        }
+        
+        .dropdown:hover .dropdown-content,
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+        
+        .dropdown-content a {
+            color: #4B5563;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #F3F4F6;
+            color: #7C3AED;
+        }
+        
+        .dropdown-content a:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .dropdown-content a:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .mobile-dropdown {
+            display: none;
+        }
+        
+        .mobile-dropdown.active {
+            display: block;
+            background-color: #F9FAFB;
+            margin: 8px -8px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .mobile-dropdown a {
+            display: block;
+            color: #4B5563;
+            padding: 8px 12px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .mobile-dropdown a:hover {
+            background-color: #E5E7EB;
+            color: #7C3AED;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="logo-font text-2xl font-bold text-purple-600">Candy's Kitchen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Home</a>
+                    <div class="dropdown">
+                        <a href="#" class="text-gray-700 hover:text-purple-600 transition duration-300 flex items-center">
+                            Menu <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="#mains">Main Dishes</a>
+                            <a href="#desserts">Desserts</a>
+                            <a href="#drinks">Drinks</a>
+                            <a href="#all">All Items</a>
+                        </div>
+                    </div>
+                    <a href="index.html#about" class="text-gray-700 hover:text-purple-600 transition duration-300">About</a>
+                    <a href="index.html#contact" class="text-gray-700 hover:text-purple-600 transition duration-300">Contact</a>
+                    <a href="order.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Order
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" style="display: none;">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Home</a>
+                <div class="mobile-dropdown-toggle">
+                    <a href="#" class="block px-3 py-2 text-gray-700 hover:text-purple-600 flex items-center justify-between">
+                        Menu <i class="fas fa-chevron-down text-xs"></i>
+                    </a>
+                    <div class="mobile-dropdown">
+                        <a href="#mains" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Main Dishes</a>
+                        <a href="#desserts" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Desserts</a>
+                        <a href="#drinks" class="block px-3 py-2 text-gray-600 hover:text-purple-600">Drinks</a>
+                        <a href="#all" class="block px-3 py-2 text-gray-600 hover:text-purple-600">All Items</a>
+                    </div>
+                </div>
+                <a href="index.html#about" class="block px-3 py-2 text-gray-700 hover:text-purple-600">About</a>
+                <a href="index.html#contact" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Contact</a>
+                <a href="order.html" class="block px-3 py-2 text-purple-600 font-semibold">Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 hero-content">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-shadow">Our Complete Menu</h1>
+                <p class="text-xl mb-8 text-shadow">Explore all our delicious offerings organized by category</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 menu-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 menu-content">
+            <!-- Menu Categories -->
+            <div class="flex justify-center mb-8">
+                <div class="bg-white rounded-full shadow-md p-1 inline-flex">
+                    <button class="menu-category px-6 py-2 rounded-full bg-purple-600 text-white" data-category="all">All</button>
+                    <button class="menu-category px-6 py-2 rounded-full text-gray-600 hover:text-purple-600" data-category="mains">Main Dishes</button>
+                    <button class="menu-category px-6 py-2 rounded-full text-gray-600 hover:text-purple-600" data-category="desserts">Desserts</button>
+                    <button class="menu-category px-6 py-2 rounded-full text-gray-600 hover:text-purple-600" data-category="drinks">Drinks</button>
+                </div>
+            </div>
+
+            <!-- Menu Items Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Main Dish 1 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="mains" id="mains">
+                    <img src="grilled chicken.jpg" alt="Grilled Chicken" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Grilled Chicken</h3>
+                            <span class="text-purple-600 font-bold">₦3,500</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Tender grilled chicken with herbs and spices, served with vegetables</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Dish 2 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="mains">
+                    <img src="ima.jpg" alt="Candy's Delight Snacks" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Candy's Delight Snacks</h3>
+                            <span class="text-purple-600 font-bold">₦3,800</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Delicacy made from the floor of life with wonderful butter to give you joy</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dessert 1 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="desserts" id="desserts">
+                    <img src="rice.jpg" alt="Fried rice/Chicken" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Fried Rice/Chicken</h3>
+                            <span class="text-purple-600 font-bold">₦3,500</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Rich Fried Rice and Chicken made with love</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dessert 2 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="desserts">
+                    <img src="chips and egg.jpg" alt="Chips and Egg" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">CHIPS AND EGG</h3>
+                            <span class="text-purple-600 font-bold">₦2,000</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Sweet Chips and Egg mixed with ketchup or sause</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dessert 3 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="desserts">
+                    <img src="ppp.jpg" alt="Fish Pepper Soup" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Fish Pepper Soup</h3>
+                            <span class="text-purple-600 font-bold">₦5,000</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Best Fish Soup</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Drink 1 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="drinks" id="drinks">
+                    <img src="juice.jpg" alt="Fresh Juice" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">Fresh Juice</h3>
+                            <span class="text-purple-600 font-bold">₦2,000</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Freshly squeezed fruit juice of your choice</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Drink 2 -->
+                <div class="menu-item card-hover bg-white rounded-lg shadow-lg overflow-hidden" data-category="drinks">
+                    <img src="grilled fish.jpg" alt="Grilled Fish" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold">GRillED FISH</h3>
+                            <span class="text-purple-600 font-bold">₦12,000</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Grilled Fish with Chips, plantain or potatoes</p>
+                        <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Mobile dropdown toggle
+        const mobileDropdownToggle = document.querySelector('.mobile-dropdown-toggle');
+        const mobileDropdown = document.querySelector('.mobile-dropdown');
+        
+        if (mobileDropdownToggle && mobileDropdown) {
+            mobileDropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                mobileDropdown.classList.toggle('active');
+            });
+        }
+
+        // Cart state management
+        let cart = JSON.parse(localStorage.getItem('candysKitchenCart')) || [];
+
+        // Update cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        // Add to cart functionality
+        document.querySelectorAll('.menu-item button').forEach(button => {
+            if (button.textContent.includes('Add to Cart')) {
+                button.addEventListener('click', function() {
+                    const menuitem = this.closest('.menu-item');
+                    const itemName = menuitem.querySelector('h3').textContent;
+                    const itemPrice = menuitem.querySelector('.text-purple-600').textContent;
+                    const itemImage = menuitem.querySelector('img').src;
+                    const itemDescription = menuitem.querySelector('p').textContent;
+                    
+                    // Check if item already in cart
+                    const existingItem = cart.find(item => item.name === itemName);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({
+                            name: itemName,
+                            price: itemPrice,
+                            image: itemImage,
+                            description: itemDescription,
+                            quantity: 1
+                        });
+                    }
+                    
+                    // Save cart to localStorage
+                    localStorage.setItem('candysKitchenCart', JSON.stringify(cart));
+                    
+                    // Update cart count
+                    updateCartCount();
+                    
+                    // Change button temporarily to show feedback
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i>Added!';
+                    this.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                    this.classList.add('bg-green-600');
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.classList.remove('bg-green-600');
+                        this.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                    }, 2000);
+                });
+            }
+        });
+
+        // Menu category filtering
+        const categoryButtons = document.querySelectorAll('.menu-category');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                categoryButtons.forEach(btn => {
+                    btn.classList.remove('bg-purple-600', 'text-white');
+                    btn.classList.add('text-gray-600');
+                });
+                button.classList.remove('text-gray-600');
+                button.classList.add('bg-purple-600', 'text-white');
+
+                // Filter menu items
+                const category = button.dataset.category;
+                menuItems.forEach(item => {
+                    if (category === 'all' || item.dataset.category === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

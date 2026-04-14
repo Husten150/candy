@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order - Candy's Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2)), 
+                        url('ima.jpg') center/cover;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(243, 123, 12, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
+            z-index: -1;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            
+            .grid-cols-1 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .text-lg {
+                font-size: 1rem;
+            }
+            
+            .text-xl {
+                font-size: 1.125rem;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+            
+            .text-4xl {
+                font-size: 1.875rem;
+            }
+            
+            .text-5xl {
+                font-size: 2.25rem;
+            }
+            
+            .px-8 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .py-8 {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            .py-20 {
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+            
+            .px-4 {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .py-4 {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+            
+            .py-3 {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .py-2 {
+                padding-top: 0.375rem;
+                padding-bottom: 0.375rem;
+            }
+            
+            .px-3 {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            
+            .px-6 {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .gap-8 {
+                gap: 1rem;
+            }
+            
+            .gap-4 {
+                gap: 0.75rem;
+            }
+            
+            .gap-6 {
+                gap: 0.75rem;
+            }
+            
+            .mb-6 {
+                margin-bottom: 1rem;
+            }
+            
+            .mb-8 {
+                margin-bottom: 1.5rem;
+            }
+            
+            .mb-12 {
+                margin-bottom: 2rem;
+            }
+            
+            .mt-4 {
+                margin-top: 1rem;
+            }
+            
+            .mt-8 {
+                margin-top: 1.5rem;
+            }
+            
+            .space-y-4 > * + * {
+                margin-top: 1rem;
+            }
+            
+            .space-y-3 > * + * {
+                margin-top: 0.75rem;
+            }
+            
+            .space-y-2 > * + * {
+                margin-top: 0.5rem;
+            }
+            
+            .space-y-6 > * + * {
+                margin-top: 1.5rem;
+            }
+            
+            .w-full {
+                width: 100% !important;
+            }
+            
+            .max-w-7xl {
+                max-width: 100%;
+            }
+            
+            .max-w-4xl {
+                max-width: 100%;
+            }
+            
+            .max-w-2xl {
+                max-width: 100%;
+            }
+            
+            .max-w-md {
+                max-width: 100%;
+            }
+            
+            .h-16 {
+                height: 3.5rem;
+            }
+            
+            .h-48 {
+                height: 12rem;
+            }
+            
+            .h-64 {
+                height: 16rem;
+            }
+            
+            .w-6 {
+                width: 1.5rem;
+            }
+            
+            .h-6 {
+                height: 1.5rem;
+            }
+            
+            .text-xs {
+                font-size: 0.75rem;
+            }
+            
+            .text-sm {
+                font-size: 0.875rem;
+            }
+            
+            .rounded-lg {
+                border-radius: 0.5rem;
+            }
+            
+            .rounded-full {
+                border-radius: 9999px;
+            }
+            
+            .shadow-lg {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            
+            .sticky {
+                position: sticky;
+                top: 0;
+                z-index: 40;
+            }
+            
+            /* Mobile Navigation */
+            .mobile-menu {
+                background: white;
+                border-top: 1px solid #e5e7eb;
+            }
+            
+            .mobile-menu a {
+                display: block;
+                padding: 0.75rem 1rem;
+                color: #374151;
+                text-decoration: none;
+                border-bottom: 1px solid #f3f4f6;
+                font-size: 0.875rem;
+            }
+            
+            .mobile-menu a:hover {
+                background-color: #f9fafb;
+                color: #7c3aed;
+            }
+            
+            /* Mobile Payment Form */
+            .payment-form-mobile {
+                padding: 1rem;
+            }
+            
+            .payment-form-mobile input {
+                font-size: 16px; /* Prevents zoom on iOS */
+                padding: 0.75rem;
+                border: 1px solid #d1d5db;
+                border-radius: 0.5rem;
+                width: 100%;
+                margin-bottom: 0.75rem;
+            }
+            
+            .payment-form-mobile button {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+                border-radius: 0.5rem;
+                width: 100%;
+                margin-bottom: 0.75rem;
+            }
+            
+            /* Mobile Cart */
+            .cart-item-mobile {
+                display: flex;
+                flex-direction: column;
+                padding: 1rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                margin-bottom: 0.75rem;
+                background: white;
+            }
+            
+            .cart-item-mobile img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 0.5rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .cart-item-mobile .item-details {
+                flex: 1;
+            }
+            
+            .cart-item-mobile .item-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 0.75rem;
+            }
+            
+            /* Mobile Success Modal */
+            .modal-mobile {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 50;
+                padding: 1rem;
+            }
+            
+            .modal-content-mobile {
+                background: white;
+                border-radius: 0.5rem;
+                padding: 1.5rem;
+                max-width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            
+            /* Touch-friendly buttons */
+            .touch-button {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            /* Mobile dropdown */
+            .mobile-dropdown {
+                display: none;
+                background: #f9fafb;
+                margin: 0.5rem -0.5rem;
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+            }
+            
+            .mobile-dropdown.active {
+                display: block;
+            }
+            
+            .mobile-dropdown a {
+                display: block;
+                padding: 0.5rem 0.75rem;
+                color: #4b5563;
+                text-decoration: none;
+                font-size: 0.875rem;
+                border-radius: 0.25rem;
+            }
+            
+            .mobile-dropdown a:hover {
+                background: #e5e7eb;
+                color: #7c3aed;
+            }
+        }
+        
+        /* Prevent zoom on input focus */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="number"],
+        textarea {
+            font-size: 16px;
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+            .hero-gradient {
+                padding: 2rem 0;
+            }
+            
+            .logo-font {
+                font-size: 1.5rem;
+            }
+            
+            .cart-badge {
+                top: -0.5rem;
+                right: -0.5rem;
+                width: 1.25rem;
+                height: 1.25rem;
+                font-size: 0.625rem;
+            }
+        }
+        
+        .logo-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="logo-font text-2xl font-bold text-purple-600">Candy's Kitchen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Home</a>
+                    <a href="index.html#menu" class="text-gray-700 hover:text-purple-600 transition duration-300">Menu</a>
+                    <a href="index.html#about" class="text-gray-700 hover:text-purple-600 transition duration-300">About</a>
+                    <a href="index.html#contact" class="text-gray-700 hover:text-purple-600 transition duration-300">Contact</a>
+                    <a href="order.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Order
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Home</a>
+                <a href="index.html#menu" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Menu</a>
+                <a href="index.html#about" class="block px-3 py-2 text-gray-700 hover:text-purple-600">About</a>
+                <a href="index.html#contact" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Contact</a>
+                <a href="order.html" class="block px-3 py-2 text-purple-600 font-semibold">Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Header -->
+    <section class="hero-gradient text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">Your Order</h1>
+                <p class="text-xl">Review and complete your delicious order</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Content -->
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Cart Items -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-bold mb-6 text-gray-800">Cart Items</h2>
+                        
+                        <div id="cart-items" class="space-y-4">
+                            <!-- Cart items will be dynamically added here -->
+                        </div>
+
+                        <div id="empty-cart" class="text-center py-12 hidden">
+                            <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-600 mb-2">Your cart is empty</h3>
+                            <p class="text-gray-500 mb-6">Add some delicious items from our menu</p>
+                            <a href="index.html#menu" class="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition duration-300">
+                                <i class="fas fa-utensils mr-2"></i>View Menu
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                        <h2 class="text-2xl font-bold mb-6 text-gray-800">Order Summary</h2>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal</span>
+                                <span id="subtotal" class="font-semibold">₦0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Tax (10%)</span>
+                                <span id="tax" class="font-semibold">₦0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Delivery Fee</span>
+                                <span id="delivery" class="font-semibold">₦1,500</span>
+                            </div>
+                            <div class="border-t pt-3">
+                                <div class="flex justify-between text-lg font-bold">
+                                    <span>Total</span>
+                                    <span id="total" class="text-purple-600">₦1,500</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Information -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3 text-gray-800">Delivery Information</h3>
+                            <form id="delivery-form" class="space-y-3">
+                                <input type="text" id="customer-name" placeholder="Full Name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                <input type="email" id="customer-email" placeholder="Email Address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                <input type="tel" id="customer-phone" placeholder="Phone Number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                <input type="text" id="customer-address" placeholder="Delivery Address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                <textarea id="special-instructions" placeholder="Special Instructions (optional)" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600"></textarea>
+                            </form>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-6">
+                            <h3 class="font-semibold mb-3 text-gray-800">Payment Method</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="radio" name="payment" value="cash" checked class="mr-2 text-purple-600" id="cash-payment">
+                                    <span>Cash on Delivery</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="payment" value="card" class="mr-2 text-purple-600" id="card-payment">
+                                    <span>Pay with Card (Secure Payment)</span>
+                                </label>
+                            </div>
+                            
+                            <!-- Card Payment Information (Hidden by default) -->
+                            <div id="card-details" class="hidden space-y-4 p-4 bg-gray-50 rounded-lg">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-lock text-green-600 text-2xl mb-2"></i>
+                                    <p class="text-sm text-gray-600">Secure payment powered by Paystack</p>
+                                    <p class="text-xs text-gray-500">Payments will be settled to GTBank account 0672546973</p>
+                                </div>
+                                
+                                <!-- Payment Form -->
+                                <form id="payment-form" class="space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-2" for="card-name">Cardholder Name</label>
+                                            <input type="text" id="card-name" name="card-name" placeholder="John Doe" 
+                                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-2" for="card-number">Card Number</label>
+                                            <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456 789" 
+                                                   maxlength="23" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-2" for="card-expiry">Expiry Date</label>
+                                            <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" 
+                                                   maxlength="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-2" for="card-cvv">CVV</label>
+                                            <input type="text" id="card-cvv" name="card-cvv" placeholder="123" 
+                                                   maxlength="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 font-semibold mb-2" for="card-pin">PIN</label>
+                                            <input type="password" id="card-pin" name="card-pin" placeholder="****" 
+                                                   maxlength="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 font-semibold mb-2" for="billing-address">Billing Address</label>
+                                        <input type="text" id="billing-address" name="billing-address" placeholder="Same as delivery address" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600">
+                                    </div>
+                                    
+                                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                        <p class="text-sm text-blue-800">
+                                            <i class="fas fa-info-circle mr-2"></i>
+                                            Your payment details are encrypted and secure. Click "Place Order" to process payment.
+                                        </p>
+                                    </div>
+                                </form>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="checkout-btn" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <i class="fas fa-check-circle mr-2"></i>Place Order
+                        </button>
+
+                        <div class="mt-4 text-center">
+                            <a href="index.html#menu" class="text-purple-600 hover:text-purple-700">
+                                <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 fade-in">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">Order Placed Successfully!</h3>
+                <p class="text-gray-600 mb-6">Your order has been received and will be delivered soon.</p>
+                <div id="order-details" class="text-left bg-gray-50 p-4 rounded-lg mb-6">
+                    <!-- Order details will be added here -->
+                </div>
+                <button onclick="closeModal()" class="bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 transition duration-300">
+                    <i class="fas fa-home mr-2"></i>Back to Home
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cart state management
+        let cart = JSON.parse(localStorage.getItem('candysKitchenCart')) || [];
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Update cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        // Render cart items
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCart = document.getElementById('empty-cart');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '';
+                emptyCart.classList.remove('hidden');
+            } else {
+                emptyCart.classList.add('hidden');
+                cartItemsContainer.innerHTML = cart.map((item, index) => `
+                    <div class="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 fade-in">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-800">${item.name}</h3>
+                            <p class="text-gray-600 text-sm">${item.description}</p>
+                            <p class="text-purple-600 font-bold">${item.price}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" value="${item.quantity}" min="1" class="quantity-input border rounded px-2 py-1" onchange="setQuantity(${index}, this.value)">
+                            <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 bg-gray-200 rounded-full hover:bg-gray-300 transition duration-300">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 transition duration-300">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            updateOrderSummary();
+            updateCartCount();
+        }
+
+        // Update item quantity
+        function updateQuantity(index, change) {
+            const newQuantity = cart[index].quantity + change;
+            if (newQuantity > 0) {
+                cart[index].quantity = newQuantity;
+                saveCart();
+                renderCart();
+            }
+        }
+
+        // Set item quantity
+        function setQuantity(index, value) {
+            const quantity = parseInt(value);
+            if (quantity > 0) {
+                cart[index].quantity = quantity;
+                saveCart();
+                renderCart();
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            renderCart();
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('candysKitchenCart', JSON.stringify(cart));
+        }
+
+        // Update order summary
+        function updateOrderSummary() {
+            const subtotal = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price.replace('₦', '').replace(',', ''));
+                return sum + (price * item.quantity);
+            }, 0);
+            
+            const tax = subtotal * 0.1;
+            const delivery = cart.length > 0 ? 1500 : 0;
+            const total = subtotal + tax + delivery;
+            
+            document.getElementById('subtotal').textContent = `₦${subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('tax').textContent = `₦${tax.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('delivery').textContent = `₦${delivery.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            document.getElementById('total').textContent = `₦${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+            
+            // Enable/disable checkout button
+            const checkoutBtn = document.getElementById('checkout-btn');
+            checkoutBtn.disabled = cart.length === 0;
+        }
+
+        // Process real payment with Paystack to GTBank account 0672546973
+        function processPaymentToAugustine(amount, customerInfo) {
+            // Paystack configuration for real payment processing
+            const paystackConfig = {
+                key: 'pk_test_1234567890abcdef', // Replace with your actual Paystack public key
+                email: customerInfo.email || 'customer@example.com',
+                amount: amount * 100, // Convert to kobo (Paystack uses kobo)
+                currency: 'NGN',
+                ref: 'CANDY_' + Date.now(),
+                callback: function(response) {
+                    // Payment successful - process to Augustine's GTBank account
+                    verifyPaymentAndSettle(response, amount, customerInfo);
+                },
+                onClose: function() {
+                    // Payment window closed
+                    alert('Payment was cancelled. Please try again.');
+                }
+            };
+            
+            // Open Paystack payment modal
+            const handler = PaystackPop.setup(paystackConfig);
+            handler.openIframe();
+            
+            return true; // Payment initiated
+        }
+        
+        // Verify payment and settle to Augustine's GTBank account
+        function verifyPaymentAndSettle(response, amount, customerInfo) {
+            // In production, this would verify the payment on your server
+            // For now, we'll simulate the verification and settlement
+            
+            const paymentData = {
+                transactionId: response.reference,
+                amount: amount,
+                recipient: 'Augustine Isama',
+                account: '0672546973',
+                bank: 'GTBank',
+                status: 'completed',
+                customerEmail: customerInfo.email,
+                timestamp: new Date().toISOString(),
+                settledToGTBank: true
+            };
+            
+            // Store payment record
+            const payments = JSON.parse(localStorage.getItem('candysKitchenPayments')) || [];
+            payments.push(paymentData);
+            localStorage.setItem('candysKitchenPayments', JSON.stringify(payments));
+            
+            // Send payment alert to Augustine
+            sendPaymentAlert(paymentData);
+            
+            // Show success message
+            alert(`Payment of ${amount} NGN processed successfully! Transaction ID: ${response.reference}`);
+            
+            // Complete the order
+            completeOrder(paymentData);
+        }
+        
+        // Send payment alert to Augustine
+        function sendPaymentAlert(paymentData) {
+            // In a real system, this would send SMS/email to Augustine
+            console.log(`PAYMENT ALERT: ${paymentData.amount} NGN received and settled to GTBank account ${paymentData.account}. Transaction ID: ${paymentData.transactionId}`);
+            
+            // Store alert for Augustine
+            const alerts = JSON.parse(localStorage.getItem('augustinePaymentAlerts')) || [];
+            alerts.push({
+                message: `Payment of ${paymentData.amount} NGN received and settled to GTBank account ${paymentData.account}. Transaction ID: ${paymentData.transactionId}`,
+                timestamp: paymentData.timestamp,
+                read: false,
+                type: 'payment_received'
+            });
+            localStorage.setItem('augustinePaymentAlerts', JSON.stringify(alerts));
+        }
+        
+        // Complete order after successful payment
+        function completeOrder(paymentData) {
+            const order = {
+                id: Date.now(),
+                items: cart,
+                customer: {
+                    name: document.getElementById('customer-name').value,
+                    phone: document.getElementById('customer-phone').value,
+                    address: document.getElementById('customer-address').value,
+                    email: paymentData.customerEmail,
+                    instructions: document.getElementById('special-instructions').value
+                },
+                payment: 'card',
+                paymentStatus: 'paid',
+                paymentData: paymentData,
+                total: document.getElementById('total').textContent,
+                date: new Date().toLocaleString()
+            };
+            
+            // Save order
+            const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
+            orders.push(order);
+            localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+            
+            // Show success modal
+            showOrderSuccess(order);
+            
+            // Clear cart
+            cart = [];
+            saveCart();
+            renderCart();
+        }
+        
+        // Card input formatting
+        document.addEventListener('DOMContentLoaded', function() {
+            // Format card number input
+            const cardNumberInput = document.getElementById('card-number');
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\s/g, '');
+                    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                    e.target.value = formattedValue;
+                });
+            }
+            
+            // Format expiry date input
+            const expiryInput = document.getElementById('card-expiry');
+            if (expiryInput) {
+                expiryInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 2) {
+                        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                    }
+                    e.target.value = value;
+                });
+            }
+            
+            // Only allow numbers for CVV and PIN
+            const cvvInput = document.getElementById('card-cvv');
+            if (cvvInput) {
+                cvvInput.addEventListener('input', function(e) {
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                });
+            }
+            
+            const pinInput = document.getElementById('card-pin');
+            if (pinInput) {
+                pinInput.addEventListener('input', function(e) {
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                });
+            }
+        });
+
+        // Payment method toggle
+        const cashPayment = document.getElementById('cash-payment');
+        const cardPayment = document.getElementById('card-payment');
+        const cardDetails = document.getElementById('card-details');
+        
+        cashPayment.addEventListener('change', () => {
+            if (cashPayment.checked) {
+                cardDetails.classList.add('hidden');
+            }
+        });
+        
+        cardPayment.addEventListener('change', () => {
+            if (cardPayment.checked) {
+                cardDetails.classList.remove('hidden');
+            }
+        });
+
+        // Place order
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            if (cart.length === 0) return;
+            
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
+            const instructions = document.getElementById('special-instructions').value;
+            const email = document.getElementById('customer-email').value;
+            const payment = document.querySelector('input[name="payment"]:checked').value;
+            
+            if (!name || !phone || !address || !email) {
+                alert('Please fill in all required delivery information including email');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            const total = parseFloat(document.getElementById('total').textContent.replace('NGN', '').replace('N', '').replace(',', ''));
+            
+            if (payment === 'card') {
+                // Validate payment form
+                const cardName = document.getElementById('card-name').value;
+                const cardNumber = document.getElementById('card-number').value;
+                const cardExpiry = document.getElementById('card-expiry').value;
+                const cardCvv = document.getElementById('card-cvv').value;
+                const cardPin = document.getElementById('card-pin').value;
+                const billingAddress = document.getElementById('billing-address').value;
+                
+                if (!cardName || !cardNumber || !cardExpiry || !cardCvv || !cardPin) {
+                    alert('Please fill in all payment details');
+                    return;
+                }
+                
+                // Validate card number (exactly 19 digits)
+                const cleanCardNumber = cardNumber.replace(/\s/g, '');
+                if (cleanCardNumber.length !== 19 || !/^\d+$/.test(cleanCardNumber)) {
+                    alert('Please enter a valid 19-digit card number');
+                    return;
+                }
+                
+                // Validate expiry date (MM/YY format)
+                const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+                if (!expiryRegex.test(cardExpiry)) {
+                    alert('Please enter a valid expiry date (MM/YY)');
+                    return;
+                }
+                
+                // Validate CVV
+                if (!/^\d{3,4}$/.test(cardCvv)) {
+                    alert('Please enter a valid CVV');
+                    return;
+                }
+                
+                // Validate PIN
+                if (!/^\d{4}$/.test(cardPin)) {
+                    alert('Please enter a valid 4-digit PIN');
+                    return;
+                }
+                
+                // Prepare payment data for Paystack
+                const customerInfo = { 
+                    name, 
+                    phone, 
+                    address, 
+                    email, 
+                    instructions,
+                    cardDetails: {
+                        cardName,
+                        last4Digits: cleanCardNumber.slice(-4),
+                        expiry: cardExpiry,
+                        billingAddress: billingAddress || address
+                    }
+                };
+                
+                // Process payment with Paystack to GTBank account 0672546973
+                const paymentInitiated = processPaymentToAugustine(total, customerInfo);
+                
+                if (!paymentInitiated) {
+                    alert('Payment failed to initialize. Please try again.');
+                    return;
+                }
+            } else {
+                // Cash on delivery - create order immediately
+                const order = {
+                    id: Date.now(),
+                    items: cart,
+                    customer: { name, phone, address, email, instructions },
+                    payment: 'cash',
+                    paymentStatus: 'pending',
+                    total: document.getElementById('total').textContent,
+                    date: new Date().toLocaleString()
+                };
+                
+                // Save order
+                const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
+                orders.push(order);
+                localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+                
+                // Show success modal
+                showOrderSuccess(order);
+                
+                // Clear cart
+                cart = [];
+                saveCart();
+                renderCart();
+            }
+        });
+
+        // Show order success modal
+        function showOrderSuccess(order) {
+            const modal = document.getElementById('success-modal');
+            const orderDetails = document.getElementById('order-details');
+            
+            orderDetails.innerHTML = `
+                <div class="space-y-2">
+                    <p><strong>Order ID:</strong> #${order.id}</p>
+                    <p><strong>Name:</strong> ${order.customer.name}</p>
+                    <p><strong>Phone:</strong> ${order.customer.phone}</p>
+                    <p><strong>Address:</strong> ${order.customer.address}</p>
+                    <p><strong>Total:</strong> ${order.total}</p>
+                    <p><strong>Payment:</strong> ${order.payment === 'cash' ? 'Cash on Delivery' : 'Credit/Debit Card'}</p>
+                    <p><strong>Payment Status:</strong> ${order.paymentStatus === 'paid' ? 'Paid Successfully' : 'Pending'}</p>
+                    <p><strong>Estimated Delivery:</strong> 30-45 minutes</p>
+                    ${order.paymentStatus === 'paid' ? '<p class="text-green-600 font-semibold"><i class="fas fa-check-circle mr-2"></i>Payment processed successfully!</p>' : ''}
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize cart on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCart();
+        });
+    </script>
+</body>
+</html>
