@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Candy's Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), 
+                        url('ima.jpg') center/cover;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(243, 123, 12, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+            z-index: -1;
+        }
+        
+        .logo-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        .auth-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input {
+            padding-left: 2.5rem;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7c3aed;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6b7280;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-card {
+                margin: 1rem;
+                max-width: 100%;
+            }
+            
+            body {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="logo-font text-2xl font-bold text-purple-600">Candy's Kitchen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Home</a>
+                    <div class="dropdown">
+                        <a href="menu.html" class="text-gray-700 hover:text-purple-600 transition duration-300 flex items-center">
+                            Menu <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="menu.html#mains">Main Dishes</a>
+                            <a href="desserts.html">Desserts</a>
+                            <a href="menu.html#drinks">Drinks</a>
+                            <a href="menu.html#all">All Items</a>
+                        </div>
+                    </div>
+                    <a href="recipes.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Recipes</a>
+                    <a href="#about" class="text-gray-700 hover:text-purple-600 transition duration-300">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-purple-600 transition duration-300">Contact</a>
+                    <div class="flex items-center space-x-2">
+                        <a href="signin.html" class="text-purple-600 font-semibold">Sign In</a>
+                        <a href="signup.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>Sign Up
+                        </a>
+                    </div>
+                    <a href="order.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Order
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" style="display: none;">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sign In Section -->
+    <section class="min-h-screen flex items-center justify-center auth-container">
+        <div class="auth-card p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
+                <p class="text-gray-600">Sign in to your Candy's Kitchen account</p>
+            </div>
+
+            <form id="signin-form" class="space-y-6">
+                <!-- Email Input -->
+                <div class="input-group">
+                    <label class="block text-gray-700 font-semibold mb-2" for="email">Email Address</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" 
+                               class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                    </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="input-group">
+                    <label class="block text-gray-700 font-semibold mb-2" for="password">Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" 
+                               class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required>
+                        <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="remember" name="remember" class="mr-2">
+                        <span class="text-gray-600">Remember me</span>
+                    </label>
+                    <a href="#" class="text-purple-600 hover:text-purple-700 text-sm">Forgot password?</a>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-300">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                </button>
+
+                <!-- Sign Up Link -->
+                <div class="text-center mt-6">
+                    <p class="text-gray-600">
+                        Don't have an account? 
+                        <a href="signup.html" class="text-purple-600 hover:text-purple-700 font-semibold">Sign Up</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Handle sign in form submission
+        document.getElementById('signin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Password validation
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+            
+            // Check if user exists (in real app, this would be server validation)
+            const users = JSON.parse(localStorage.getItem('candysKitchenUsers')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Store current user session
+                const session = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    address: user.address,
+                    isLoggedIn: true,
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('candysKitchenSession', JSON.stringify(session));
+                
+                if (remember) {
+                    localStorage.setItem('candysKitchenRemember', JSON.stringify(session));
+                }
+                
+                alert('Welcome back, ' + user.name + '!');
+                
+                // Redirect to order page or dashboard
+                window.location.href = 'order.html';
+            } else {
+                alert('Invalid email or password. Please try again or sign up for a new account.');
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.createElement('div');
+        mobileMenu.id = 'mobile-menu';
+        mobileMenu.className = 'hidden md:hidden bg-white border-t';
+        mobileMenu.innerHTML = `
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Home</a>
+                <a href="menu.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Menu</a>
+                <a href="recipes.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Recipes</a>
+                <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-purple-600">About</a>
+                <a href="#contact" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Contact</a>
+                <div class="border-t pt-2 mt-2">
+                    <a href="signin.html" class="block px-3 py-2 text-purple-600 font-semibold">Sign In</a>
+                    <a href="signup.html" class="block px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Sign Up</a>
+                </div>
+                <a href="order.html" class="block px-3 py-2 text-purple-600 font-semibold">Order</a>
+            </div>
+        `;
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            document.body.appendChild(mobileMenu);
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            if (session && session.isLoggedIn) {
+                // User is logged in, redirect to order page
+                window.location.href = 'order.html';
+            }
+        });
+    </script>
+</body>
+</html>

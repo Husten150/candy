@@ -843,21 +843,29 @@
         
         // Complete order after successful payment
         function completeOrder(paymentData) {
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
             const order = {
                 id: Date.now(),
                 items: cart,
-                customer: {
+                customer: session ? {
+                    name: session.name,
+                    phone: session.phone,
+                    address: session.address,
+                    email: session.email,
+                    instructions: document.getElementById('special-instructions').value
+                } : {
                     name: document.getElementById('customer-name').value,
                     phone: document.getElementById('customer-phone').value,
                     address: document.getElementById('customer-address').value,
-                    email: paymentData.customerEmail,
+                    email: document.getElementById('customer-email').value,
                     instructions: document.getElementById('special-instructions').value
                 },
                 payment: 'card',
                 paymentStatus: 'paid',
                 paymentData: paymentData,
                 total: document.getElementById('total').textContent,
-                date: new Date().toLocaleString()
+                date: new Date().toLocaleString(),
+                customerId: session ? session.id : null
             };
             
             // Save order
@@ -934,6 +942,13 @@
         // Place order
         document.getElementById('checkout-btn').addEventListener('click', function() {
             if (cart.length === 0) return;
+            
+            // Check if user is logged in
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            if (!session || !session.isLoggedIn) {
+                alert('Please sign in to place an order. <a href="signin.html" style="color: #7c3aed;">Click here to sign in</a>');
+                return;
+            }
             
             const name = document.getElementById('customer-name').value;
             const phone = document.getElementById('customer-phone').value;

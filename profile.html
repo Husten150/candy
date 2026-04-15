@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Candy's Kitchen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), 
+                        url('ima.jpg') center/cover;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(243, 123, 12, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+            z-index: -1;
+        }
+        
+        .logo-font {
+            font-family: 'Pacifico', cursive;
+        }
+        
+        .profile-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        .star {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .star:hover {
+            color: #f59e0b;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-card {
+                margin: 1rem;
+                max-width: 100%;
+            }
+            
+            body {
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="logo-font text-2xl font-bold text-purple-600">Candy's Kitchen</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Home</a>
+                    <div class="dropdown">
+                        <a href="menu.html" class="text-gray-700 hover:text-purple-600 transition duration-300 flex items-center">
+                            Menu <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="menu.html#mains">Main Dishes</a>
+                            <a href="desserts.html">Desserts</a>
+                            <a href="menu.html#drinks">Drinks</a>
+                            <a href="menu.html#all">All Items</a>
+                        </div>
+                    </div>
+                    <a href="recipes.html" class="text-gray-700 hover:text-purple-600 transition duration-300">Recipes</a>
+                    <a href="#about" class="text-gray-700 hover:text-purple-600 transition duration-300">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-purple-600 transition duration-300">Contact</a>
+                    <div class="flex items-center space-x-2">
+                        <a href="signin.html" class="text-gray-700 hover:text-purple-600 transition duration-300">
+                            <i class="fas fa-sign-in-alt mr-1"></i>Sign In
+                        </a>
+                        <a href="signup.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>Sign Up
+                        </a>
+                    </div>
+                    <a href="order.html" class="bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition duration-300 relative">
+                        <i class="fas fa-shopping-cart mr-2"></i>Order
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs" style="display: none;">0</span>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-purple-600">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Section -->
+    <section class="min-h-screen flex items-center justify-center profile-container">
+        <div class="profile-card p-8">
+            <!-- User Info -->
+            <div class="text-center mb-8">
+                <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user text-purple-600 text-4xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">My Profile</h1>
+                <p class="text-gray-600">Welcome back! Manage your orders and leave reviews</p>
+            </div>
+
+            <!-- User Details -->
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Account Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Full Name</p>
+                        <p id="user-name" class="font-medium text-gray-800">Loading...</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Email</p>
+                        <p id="user-email" class="font-medium text-gray-800">Loading...</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Phone</p>
+                        <p id="user-phone" class="font-medium text-gray-800">Loading...</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Address</p>
+                        <p id="user-address" class="font-medium text-gray-800">Loading...</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">Member Since</p>
+                        <p id="user-joined" class="font-medium text-gray-800">Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order History -->
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Order History</h2>
+                <div id="order-history" class="space-y-4">
+                    <!-- Orders will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Reviews Section -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-gray-800">Leave a Review</h2>
+                <div class="review-card">
+                    <form id="review-form" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" for="rating">Rating</label>
+                            <div class="flex space-x-2">
+                                <div class="star-rating" id="star-rating">
+                                    <i class="fas fa-star star" data-rating="1"></i>
+                                    <i class="fas fa-star star" data-rating="2"></i>
+                                    <i class="fas fa-star star" data-rating="3"></i>
+                                    <i class="fas fa-star star" data-rating="4"></i>
+                                    <i class="fas fa-star star" data-rating="5"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" for="review-text">Your Review</label>
+                            <textarea id="review-text" rows="4" placeholder="Share your experience with Candy's Kitchen..." 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-purple-600" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-300">
+                            <i class="fas fa-star mr-2"></i>Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <div class="text-center mt-6">
+                <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-300">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load user session
+        window.addEventListener('load', function() {
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            if (!session || !session.isLoggedIn) {
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+            // Display user information
+            document.getElementById('user-name').textContent = session.name;
+            document.getElementById('user-email').textContent = session.email;
+            document.getElementById('user-phone').textContent = session.phone;
+            document.getElementById('user-address').textContent = session.address;
+            document.getElementById('user-joined').textContent = new Date(session.loginTime).toLocaleDateString();
+            
+            // Load order history
+            loadOrderHistory();
+            
+            // Load reviews
+            loadReviews();
+        });
+
+        // Load order history
+        function loadOrderHistory() {
+            const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
+            const userOrders = orders.filter(order => order.customerId === JSON.parse(localStorage.getItem('candysKitchenSession')).id);
+            
+            const orderHistoryDiv = document.getElementById('order-history');
+            
+            if (userOrders.length === 0) {
+                orderHistoryDiv.innerHTML = '<p class="text-gray-500 text-center">No orders found. Start by <a href="order.html" class="text-purple-600 hover:text-purple-700">placing an order</a>!</p>';
+            } else {
+                orderHistoryDiv.innerHTML = userOrders.map(order => `
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-semibold text-gray-800">Order #${order.id}</h3>
+                            <span class="text-sm text-gray-500">${order.date}</span>
+                        </div>
+                        <div class="mb-3">
+                            <p class="text-sm text-gray-600 mb-1">Items: ${order.items.length} items</p>
+                            <div class="space-y-2">
+                                ${order.items.map(item => `
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">${item.name} x${item.quantity}</span>
+                                        <span class="text-purple-600 font-semibold">₦${item.price}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Total: <span class="text-purple-600 font-bold">₦${order.total}</span></span>
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold ${order.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                ${order.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Load reviews
+        function loadReviews() {
+            const reviews = JSON.parse(localStorage.getItem('candysKitchenReviews')) || [];
+            const userReviews = reviews.filter(review => review.customerId === JSON.parse(localStorage.getItem('candysKitchenSession')).id);
+            
+            // Display existing reviews
+            if (userReviews.length > 0) {
+                const reviewsHtml = userReviews.map(review => `
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center mb-2">
+                            <div class="star-rating">
+                                ${Array.from({length: 5}, (_, i) => 
+                                    `<i class="fas fa-star ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}"></i>`
+                                ).join('')}
+                            </div>
+                            <span class="text-sm text-gray-500">${review.date}</span>
+                        </div>
+                        <p class="text-gray-700">${review.text}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('review-form').insertAdjacentHTML('beforeend', `
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Your Previous Reviews</h3>
+                    <div class="space-y-4">
+                        ${reviewsHtml}
+                    </div>
+                `);
+            }
+        }
+
+        // Star rating functionality
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                document.querySelectorAll('.star').forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-yellow-400');
+                    } else {
+                        s.classList.remove('text-yellow-400');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+
+        // Handle review submission
+        document.getElementById('review-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            const rating = document.querySelectorAll('.star.text-yellow-400').length;
+            const reviewText = document.getElementById('review-text').value;
+            
+            if (!reviewText.trim()) {
+                alert('Please enter your review text');
+                return;
+            }
+            
+            // Save review
+            const review = {
+                id: Date.now(),
+                customerId: session.id,
+                customerName: session.name,
+                rating: rating,
+                text: reviewText,
+                date: new Date().toLocaleDateString()
+            };
+            
+            const reviews = JSON.parse(localStorage.getItem('candysKitchenReviews')) || [];
+            reviews.push(review);
+            localStorage.setItem('candysKitchenReviews', JSON.stringify(reviews));
+            
+            alert('Thank you for your review!');
+            document.getElementById('review-text').value = '';
+            
+            // Reload reviews
+            loadReviews();
+        });
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('candysKitchenSession');
+                localStorage.removeItem('candysKitchenRemember');
+                window.location.href = 'signin.html';
+            }
+        }
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.createElement('div');
+        mobileMenu.id = 'mobile-menu';
+        mobileMenu.className = 'hidden md:hidden bg-white border-t';
+        mobileMenu.innerHTML = `
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Home</a>
+                <a href="menu.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Menu</a>
+                <a href="recipes.html" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Recipes</a>
+                <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-purple-600">About</a>
+                <a href="#contact" class="block px-3 py-2 text-gray-700 hover:text-purple-600">Contact</a>
+                <div class="border-t pt-2 mt-2">
+                    <a href="signin.html" class="block px-3 py-2 text-purple-600 font-semibold">Sign In</a>
+                    <a href="signup.html" class="block px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Sign Up</a>
+                </div>
+                <a href="order.html" class="block px-3 py-2 text-purple-600 font-semibold">Order</a>
+            </div>
+        `;
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            document.body.appendChild(mobileMenu);
+        });
+    </script>
+</body>
+</html>
