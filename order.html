@@ -846,6 +846,8 @@
             const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
             const order = {
                 id: Date.now(),
+                userId: session ? session.id : null,
+                userEmail: session ? session.email : (document.getElementById('customer-email')?.value || ''),
                 items: cart,
                 customer: session ? {
                     name: session.name,
@@ -868,7 +870,15 @@
                 customerId: session ? session.id : null
             };
             
-            // Save order
+            // Save order to user's profile
+            if (session && session.isLoggedIn) {
+                // Save to user's orders
+                const userOrders = JSON.parse(localStorage.getItem('userOrders_' + session.email)) || [];
+                userOrders.push(order);
+                localStorage.setItem('userOrders_' + session.email, JSON.stringify(userOrders));
+            }
+            
+            // Also save to general orders for admin view
             const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
             orders.push(order);
             localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
@@ -882,8 +892,19 @@
             renderCart();
         }
         
-        // Card input formatting
+        // Card input formatting and initialization
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in first
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            if (!session || !session.isLoggedIn) {
+                // User is not logged in, redirect to signin page
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+            // User is logged in, continue with cart initialization
+            renderCart();
+            
             // Format card number input
             const cardNumberInput = document.getElementById('card-number');
             if (cardNumberInput) {
@@ -920,26 +941,6 @@
                     e.target.value = e.target.value.replace(/\D/g, '');
                 });
             }
-        });
-
-        // Payment method toggle
-        const cashPayment = document.getElementById('cash-payment');
-        const cardPayment = document.getElementById('card-payment');
-        const cardDetails = document.getElementById('card-details');
-        
-        cashPayment.addEventListener('change', () => {
-            if (cashPayment.checked) {
-                cardDetails.classList.add('hidden');
-            }
-        });
-        
-        cardPayment.addEventListener('change', () => {
-            if (cardPayment.checked) {
-                cardDetails.classList.remove('hidden');
-            }
-        });
-
-        // Place order
         document.getElementById('checkout-btn').addEventListener('click', function() {
             if (cart.length === 0) return;
             
@@ -1035,8 +1036,11 @@
                 }
             } else {
                 // Cash on delivery - create order immediately
+                const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
                 const order = {
                     id: Date.now(),
+                    userId: session ? session.id : null,
+                    userEmail: session ? session.email : email,
                     items: cart,
                     customer: { name, phone, address, email, instructions },
                     payment: 'cash',
@@ -1045,7 +1049,15 @@
                     date: new Date().toLocaleString()
                 };
                 
-                // Save order
+                // Save order to user's profile
+                if (session && session.isLoggedIn) {
+                    // Save to user's orders
+                    const userOrders = JSON.parse(localStorage.getItem('userOrders_' + session.email)) || [];
+                    userOrders.push(order);
+                    localStorage.setItem('userOrders_' + session.email, JSON.stringify(userOrders));
+                }
+                
+                // Also save to general orders for admin view
                 const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
                 orders.push(order);
                 localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
@@ -1091,7 +1103,6 @@
             window.location.href = 'index.html';
         }
 
-        <script>
         // Check if user is logged in
         document.addEventListener('DOMContentLoaded', function() {
             const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
@@ -1104,7 +1115,6 @@
             // User is logged in, continue with cart initialization
             renderCart();
         });
-    </script>
     </script>
 </body>
 </html>

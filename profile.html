@@ -236,8 +236,8 @@
 
         // Load order history
         function loadOrderHistory() {
-            const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
-            const userOrders = orders.filter(order => order.customerId === JSON.parse(localStorage.getItem('candysKitchenSession')).id);
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            const userOrders = JSON.parse(localStorage.getItem('userOrders_' + session.email)) || [];
             
             const orderHistoryDiv = document.getElementById('order-history');
             
