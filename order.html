@@ -646,6 +646,10 @@
     <script>
         // Cart state management
         let cart = JSON.parse(localStorage.getItem('candysKitchenCart')) || [];
+        
+        // Debug: Log cart contents
+        console.log('Cart loaded on order page:', cart);
+        console.log('Cart length:', cart.length);
 
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -665,13 +669,16 @@
 
         // Render cart items
         function renderCart() {
+            console.log('renderCart called, cart length:', cart.length);
             const cartItemsContainer = document.getElementById('cart-items');
             const emptyCart = document.getElementById('empty-cart');
             
             if (cart.length === 0) {
+                console.log('Cart is empty, showing empty cart message');
                 cartItemsContainer.innerHTML = '';
                 emptyCart.classList.remove('hidden');
             } else {
+                console.log('Cart has items, rendering:', cart);
                 emptyCart.classList.add('hidden');
                 cartItemsContainer.innerHTML = cart.map((item, index) => `
                     <div class="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50 fade-in">
@@ -902,6 +909,10 @@
                 return;
             }
             
+            // Debug: Check cart state before rendering
+            console.log('DOMContentLoaded - cart before render:', cart);
+            console.log('localStorage cart:', JSON.parse(localStorage.getItem('candysKitchenCart')));
+            
             // User is logged in, continue with cart initialization
             renderCart();
             
@@ -941,142 +952,146 @@
                     e.target.value = e.target.value.replace(/\D/g, '');
                 });
             }
-        document.getElementById('checkout-btn').addEventListener('click', function() {
-            if (cart.length === 0) return;
             
-            // Check if user is logged in
-            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
-            if (!session || !session.isLoggedIn) {
-                alert('Please sign in to place an order. <a href="signin.html" style="color: #7c3aed;">Click here to sign in</a>');
-                return;
-            }
-            
-            const name = document.getElementById('customer-name').value;
-            const phone = document.getElementById('customer-phone').value;
-            const address = document.getElementById('customer-address').value;
-            const instructions = document.getElementById('special-instructions').value;
-            const email = document.getElementById('customer-email').value;
-            const payment = document.querySelector('input[name="payment"]:checked').value;
-            
-            if (!name || !phone || !address || !email) {
-                alert('Please fill in all required delivery information including email');
-                return;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address');
-                return;
-            }
-            
-            const total = parseFloat(document.getElementById('total').textContent.replace(/[^\d.]/g, ''));
-            
-            if (payment === 'card') {
-                // Validate payment form
-                const cardName = document.getElementById('card-name').value;
-                const cardNumber = document.getElementById('card-number').value;
-                const cardExpiry = document.getElementById('card-expiry').value;
-                const cardCvv = document.getElementById('card-cvv').value;
-                const cardPin = document.getElementById('card-pin').value;
-                const billingAddress = document.getElementById('billing-address').value;
+            // Checkout button event listener
+            document.getElementById('checkout-btn').addEventListener('click', function() {
+                if (cart.length === 0) return;
                 
-                if (!cardName || !cardNumber || !cardExpiry || !cardCvv || !cardPin) {
-                    alert('Please fill in all payment details');
-                    return;
-                }
-                
-                // Validate card number (16 or 19 digits)
-                const cleanCardNumber = cardNumber.replace(/\s/g, '');
-                if ((cleanCardNumber.length !== 16 && cleanCardNumber.length !== 19) || !/^\d+$/.test(cleanCardNumber)) {
-                    alert('Please enter a valid 16 or 19-digit card number');
-                    return;
-                }
-                
-                // Validate expiry date (MM/YY format)
-                const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
-                if (!expiryRegex.test(cardExpiry)) {
-                    alert('Please enter a valid expiry date (MM/YY)');
-                    return;
-                }
-                
-                // Validate CVV
-                if (!/^\d{3,4}$/.test(cardCvv)) {
-                    alert('Please enter a valid CVV');
-                    return;
-                }
-                
-                // Validate PIN
-                if (!/^\d{4}$/.test(cardPin)) {
-                    alert('Please enter a valid 4-digit PIN');
-                    return;
-                }
-                
-                // Prepare payment data for Paystack
-                const customerInfo = { 
-                    name, 
-                    phone, 
-                    address, 
-                    email, 
-                    instructions,
-                    cardDetails: {
-                        cardName,
-                        last4Digits: cleanCardNumber.slice(-4),
-                        expiry: cardExpiry,
-                        billingAddress: billingAddress || address
-                    }
-                };
-                
-                // Process payment with Paystack to GTBank account 0672546973
-                const paymentInitiated = processPaymentToAugustine(total, customerInfo);
-                
-                if (!paymentInitiated) {
-                    alert('Payment failed to initialize. Please try again.');
-                    return;
-                }
-            } else {
-                // Cash on delivery - create order immediately
+                // Check if user is logged in
                 const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
-                const order = {
-                    id: Date.now(),
-                    userId: session ? session.id : null,
-                    userEmail: session ? session.email : email,
-                    items: cart,
-                    customer: { name, phone, address, email, instructions },
-                    payment: 'cash',
-                    paymentStatus: 'pending',
-                    total: document.getElementById('total').textContent,
-                    date: new Date().toLocaleString()
-                };
-                
-                // Save order to user's profile
-                if (session && session.isLoggedIn) {
-                    // Save to user's orders
-                    const userOrders = JSON.parse(localStorage.getItem('userOrders_' + session.email)) || [];
-                    userOrders.push(order);
-                    localStorage.setItem('userOrders_' + session.email, JSON.stringify(userOrders));
+                if (!session || !session.isLoggedIn) {
+                    alert('Please sign in to place an order. <a href="signin.html" style="color: #7c3aed;">Click here to sign in</a>');
+                    return;
                 }
                 
-                // Also save to general orders for admin view
-                const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
-                orders.push(order);
-                localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+                const name = document.getElementById('customer-name').value;
+                const phone = document.getElementById('customer-phone').value;
+                const address = document.getElementById('customer-address').value;
+                const instructions = document.getElementById('special-instructions').value;
+                const email = document.getElementById('customer-email').value;
+                const payment = document.querySelector('input[name="payment"]:checked').value;
                 
-                // Show success modal
-                showOrderSuccess(order);
+                if (!name || !phone || !address || !email) {
+                    alert('Please fill in all required delivery information including email');
+                    return;
+                }
                 
-                // Clear cart
-                cart = [];
-                saveCart();
-                renderCart();
-            }
-        });
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                // Validate phone number
+                if (!/^[\d\s\-\+\(\)]+$/.test(phone) || phone.length < 10) {
+                    alert('Please enter a valid phone number');
+                    return;
+                }
+                
+                if (payment === 'card') {
+                    // Get card details
+                    const cardName = document.getElementById('card-name').value;
+                    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+                    const cardExpiry = document.getElementById('card-expiry').value;
+                    const cardCvv = document.getElementById('card-cvv').value;
+                    const cardPin = document.getElementById('card-pin').value;
+                    const billingAddress = document.getElementById('billing-address').value;
+                    
+                    // Validate card details
+                    if (!cardName || !cardNumber || !cardExpiry || !cardCvv || !cardPin) {
+                        alert('Please fill in all card details');
+                        return;
+                    }
+                    
+                    // Validate card number (19 digits)
+                    if (!/^\d{19}$/.test(cardNumber)) {
+                        alert('Please enter a valid 19-digit card number');
+                        return;
+                    }
+                    
+                    // Validate expiry date (MM/YY format)
+                    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry)) {
+                        alert('Please enter a valid expiry date in MM/YY format');
+                        return;
+                    }
+                    
+                    // Validate CVV
+                    if (!/^\d{3,4}$/.test(cardCvv)) {
+                        alert('Please enter a valid CVV');
+                        return;
+                    }
+                    
+                    // Validate PIN
+                    if (!/^\d{4}$/.test(cardPin)) {
+                        alert('Please enter a valid 4-digit PIN');
+                        return;
+                    }
+                    
+                    // Prepare payment data for Paystack
+                    const customerInfo = { 
+                        name, 
+                        phone, 
+                        address, 
+                        email, 
+                        instructions,
+                        cardDetails: {
+                            cardName,
+                            last4Digits: cardNumber.slice(-4),
+                            expiry: cardExpiry,
+                            billingAddress: billingAddress || address
+                        }
+                    };
+                    
+                    // Process payment with Paystack to GTBank account 0672546973
+                    const paymentInitiated = processPaymentToAugustine(total, customerInfo);
+                    
+                    if (!paymentInitiated) {
+                        alert('Payment failed to initialize. Please try again.');
+                        return;
+                    }
+                } else {
+                    // Cash on delivery - create order immediately
+                    const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+                    const order = {
+                        id: Date.now(),
+                        userId: session ? session.id : null,
+                        userEmail: session ? session.email : email,
+                        items: cart,
+                        customer: { name, phone, address, email, instructions },
+                        payment: 'cash',
+                        paymentStatus: 'pending',
+                        total: document.getElementById('total').textContent,
+                        date: new Date().toLocaleString()
+                    };
+                    
+                    // Save order to user's profile
+                    if (session && session.isLoggedIn) {
+                        // Save to user's orders
+                        const userOrders = JSON.parse(localStorage.getItem('userOrders_' + session.email)) || [];
+                        userOrders.push(order);
+                        localStorage.setItem('userOrders_' + session.email, JSON.stringify(userOrders));
+                    }
+                    
+                    // Also save to general orders for admin view
+                    const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
+                    orders.push(order);
+                    localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+                    
+                    // Show success modal
+                    showOrderSuccess(order);
+                    
+                    // Clear cart
+                    cart = [];
+                    saveCart();
+                    renderCart();
+                }
+            });
 
-        // Show order success modal
+// Show order success modal
         function showOrderSuccess(order) {
             const modal = document.getElementById('success-modal');
             const orderDetails = document.getElementById('order-details');
-            
             orderDetails.innerHTML = `
                 <div class="space-y-2">
                     <p><strong>Order ID:</strong> #${order.id}</p>
@@ -1102,19 +1117,6 @@
             modal.classList.remove('flex');
             window.location.href = 'index.html';
         }
-
-        // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
-            if (!session || !session.isLoggedIn) {
-                // User is not logged in, redirect to signin page
-                window.location.href = 'signin.html';
-                return;
-            }
-            
-            // User is logged in, continue with cart initialization
-            renderCart();
-        });
     </script>
 </body>
 </html>
