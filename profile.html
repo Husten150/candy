@@ -232,7 +232,19 @@
             
             // Load reviews
             loadReviews();
+            
+            // Update cart count
+            updateCartCount();
         });
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('candysKitchenCart')) || [];
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
 
         // Load order history
         function loadOrderHistory() {
