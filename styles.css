@@ -1264,6 +1264,27 @@ button:disabled {
     resize: none;
 }
 
+/* Warning message colors */
+.bg-yellow-50 {
+    background-color: #fefce8;
+}
+
+.border-yellow-200 {
+    border-color: #fde047;
+}
+
+.text-yellow-600 {
+    color: #ca8a04;
+}
+
+.text-yellow-800 {
+    color: #713f12;
+}
+
+.text-yellow-700 {
+    color: #a16207;
+}
+
 /* Radio button styles */
 input[type="radio"] {
     accent-color: #9333ea;

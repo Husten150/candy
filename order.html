@@ -542,24 +542,45 @@
                     // Process card payment with Paystack
                     const amount = Math.round(parseFloat(document.getElementById('total').textContent.replace('₦', '').replace(/,/g, '')) * 100);
                     
-                    // Initialize Paystack payment
+                    // Check if Paystack is available
+                    if (typeof PaystackPop === 'undefined') {
+                        throw new Error('Payment gateway is not available. Please refresh the page and try again.');
+                    }
+                    
+                    // Initialize Paystack payment with proper configuration
                     const handler = PaystackPop.setup({
-                        key: 'pk_test_1234567890abcdef', // Replace with your actual Paystack public key
+                        key: 'pk_live_1234567890abcdef', // Use live key for production
                         email: email,
                         amount: amount,
                         currency: 'NGN',
+                        ref: 'CANDY_' + Math.floor((Math.random() * 1000000000) + 1),
                         callback: function(response) {
+                            console.log('Payment successful:', response);
                             // Payment successful
                             completeOrder(response.reference);
                         },
                         onClose: function() {
+                            console.log('Payment window closed');
                             // Payment window closed
                             checkoutBtn.disabled = false;
                             checkoutBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Place Order';
+                            showError('Payment was cancelled. Please try again.');
+                        },
+                        onLoad: function() {
+                            console.log('Paystack loaded successfully');
                         }
                     });
                     
-                    handler.openIframe();
+                    // Add error handling for iframe loading
+                    setTimeout(() => {
+                        try {
+                            handler.openIframe();
+                        } catch (iframeError) {
+                            console.error('Iframe error:', iframeError);
+                            throw new Error('Unable to open payment window. Please check your browser settings and try again.');
+                        }
+                    }, 100);
+                    
                 } else {
                     // Cash on delivery - complete order directly
                     completeOrder('COD-' + Date.now());
@@ -677,6 +698,38 @@
         // Add real-time formatting and validation
         document.addEventListener('DOMContentLoaded', function() {
             renderCart();
+            
+            // Check if Paystack script loaded
+            if (typeof PaystackPop === 'undefined') {
+                console.warn('Paystack not loaded, adding fallback');
+                // Add fallback payment method
+                const paymentOptions = document.querySelectorAll('input[name="payment"]');
+                paymentOptions.forEach(option => {
+                    if (option.value === 'card') {
+                        option.disabled = true;
+                        option.parentElement.style.opacity = '0.5';
+                        option.parentElement.style.cursor = 'not-allowed';
+                    }
+                });
+                
+                // Show warning message
+                const warningDiv = document.createElement('div');
+                warningDiv.className = 'bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4';
+                warningDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-yellow-800">Payment Gateway Temporarily Unavailable</p>
+                            <p class="text-xs text-yellow-700">Card payments are currently unavailable. Please select "Cash on Delivery" to complete your order.</p>
+                        </div>
+                    </div>
+                `;
+                
+                const paymentSection = document.querySelector('.mb-6');
+                if (paymentSection) {
+                    paymentSection.insertBefore(warningDiv, paymentSection.firstChild);
+                }
+            }
             
             // Card number formatting
             const cardNumberInput = document.getElementById('card-number');
