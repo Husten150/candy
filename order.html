@@ -831,20 +831,34 @@
             completeOrder(paymentData);
         }
         
-        // Send payment alert (secure implementation)
-        function sendPaymentAlert(paymentData) {
-            // Security: Payment alerts should be handled by secure backend
-            // Never expose account details or banking information in frontend
+        // Send WhatsApp order notification
+        function sendWhatsAppNotification(order) {
+            // Format order details for WhatsApp
+            const orderItems = order.items.map(item => 
+                `${item.quantity}x ${item.name} - ${item.price}`
+            ).join('\n');
             
-            // Store alert for admin (without sensitive details)
-            const alerts = JSON.parse(localStorage.getItem('adminPaymentAlerts')) || [];
-            alerts.push({
-                message: `Payment of ${paymentData.amount} NGN received. Transaction ID: ${paymentData.transactionId}`,
-                timestamp: paymentData.timestamp,
-                read: false,
-                type: 'payment_received'
-            });
-            localStorage.setItem('adminPaymentAlerts', JSON.stringify(alerts));
+            const message = encodeURIComponent(
+                `*NEW ORDER - Candy's Kitchen*\n\n` +
+                `*Order ID:* #${order.id}\n` +
+                `*Customer:* ${order.customer.name}\n` +
+                `*Phone:* ${order.customer.phone}\n` +
+                `*Address:* ${order.customer.address}\n` +
+                `*Email:* ${order.customer.email}\n\n` +
+                `*Order Items:*\n${orderItems}\n\n` +
+                `*Total:* ${order.total}\n` +
+                `*Payment:* ${order.payment === 'cash' ? 'Cash on Delivery' : 'Card Payment'}\n` +
+                `*Date:* ${order.date}\n\n` +
+                `*Delivery Instructions:* ${order.customer.instructions || 'None'}\n\n` +
+                `*Please call customer to confirm delivery time.*`
+            );
+            
+            // Replace with your WhatsApp number (without + and spaces)
+            const phoneNumber = '2349085336949'; // User's WhatsApp number: 09085336949
+            
+            // Open WhatsApp with pre-filled message
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
         }
         
         // Complete order after successful payment
@@ -888,6 +902,9 @@
             const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
             orders.push(order);
             localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+            
+            // Send WhatsApp notification with order details
+            sendWhatsAppNotification(order);
             
             // Show success modal
             showOrderSuccess(order);
@@ -1079,6 +1096,9 @@
                     const orders = JSON.parse(localStorage.getItem('candysKitchenOrders')) || [];
                     orders.push(order);
                     localStorage.setItem('candysKitchenOrders', JSON.stringify(orders));
+                    
+                    // Send WhatsApp notification with order details
+                    sendWhatsAppNotification(order);
                     
                     // Show success modal
                     showOrderSuccess(order);
