@@ -798,16 +798,27 @@
 
         // Process payment with Paystack (real integration)
         function processPaymentToAugustine(amount, customerInfo) {
+            // Get the total amount from the DOM and convert to number
+            const totalElement = document.getElementById('total');
+            const totalText = totalElement ? totalElement.textContent : '0';
+            const numericAmount = parseFloat(totalText.replace(/[₦,]/g, ''));
+            
+            // Validate amount
+            if (isNaN(numericAmount) || numericAmount <= 0) {
+                alert('Invalid payment amount. Please check your order total.');
+                return false;
+            }
+            
             // Initialize Paystack payment
             const handler = PaystackPop.setup({
                 key: 'pk_test_7e5f4c088de3a0eeaf8f7825e78db908636a0549', // Test public key
                 email: customerInfo.email,
-                amount: amount * 100, // Convert to kobo
+                amount: Math.round(numericAmount * 100), // Convert to kobo properly
                 currency: 'NGN',
                 ref: 'CANDY_' + Math.floor(Math.random() * 1000000000 + 1), // Generate unique reference
                 callback: function(response) {
                     // Payment successful - verify before proceeding
-                    verifyPaymentAndSettle(response, amount, customerInfo);
+                    verifyPaymentAndSettle(response, numericAmount, customerInfo);
                 },
                 onClose: function() {
                     // Payment cancelled by user
@@ -887,7 +898,7 @@
             );
             
             // Replace with your WhatsApp number (without + and spaces)
-            const phoneNumber = '2349085336949'; // User's WhatsApp number: 09085336949
+            const phoneNumber = '2349037457567'; // User's WhatsApp number: 09037457567
             
             // Open WhatsApp with pre-filled message
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
