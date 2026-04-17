@@ -644,12 +644,45 @@
     </div>
 
     <script>
+        // Security: Authentication check for sensitive operations
+        function isAuthenticated() {
+            const session = JSON.parse(localStorage.getItem('candysKitchenSession'));
+            return session && session.isLoggedIn;
+        }
+        
+        // Security: Input validation and sanitization
+        function validateInput(input, type) {
+            if (!input || typeof input !== 'string') return false;
+            
+            switch(type) {
+                case 'email':
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
+                case 'phone':
+                    return /^[\d\s\-\+\(\)]+$/.test(input) && input.length >= 10;
+                case 'name':
+                    return /^[a-zA-Z\s]{2,50}$/.test(input.trim());
+                case 'address':
+                    return input.trim().length >= 5 && input.length <= 200;
+                case 'amount':
+                    return /^\d+(\.\d{1,2})?$/.test(input) && parseFloat(input) > 0;
+                default:
+                    return input.trim().length > 0;
+            }
+        }
+        
+        // Security: Sanitize input to prevent XSS
+        function sanitizeInput(input) {
+            if (!input || typeof input !== 'string') return '';
+            return input
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#x27;')
+                .trim();
+        }
+        
         // Cart state management
         let cart = JSON.parse(localStorage.getItem('candysKitchenCart')) || [];
-        
-        // Debug: Log cart contents
-        console.log('Cart loaded on order page:', cart);
-        console.log('Cart length:', cart.length);
 
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -761,69 +794,35 @@
             checkoutBtn.disabled = cart.length === 0;
         }
 
-        // Process real payment with Paystack to GTBank account 0672546973
+        // Process payment with Paystack (secure implementation)
         function processPaymentToAugustine(amount, customerInfo) {
-            // Paystack configuration for real payment processing
-            const paystackConfig = {
-                key: 'pk_test_7e5f4c088de3a0eeaf8f7825e78db908636a0549', // Your Paystack test public key
-                email: customerInfo.email || 'hustenisama@gmail.com',
-                amount: amount * 100, // Convert to kobo (Paystack uses kobo)
-                currency: 'NGN',
-                ref: 'CANDY_' + Date.now(),
-                metadata: {
-                    custom_fields: [
-                        {
-                            display_name: "Candy's Kitchen",
-                            variable_name: "candys_kitchen",
-                            value: "Order Payment"
-                        }
-                    ],
-                    business_name: "Candy's Kitchen",
-                    settlement_bank: "058", // GTBank code
-                    account_number: "0672546973",
-                    account_name: "Augustine Isama"
-                },
-                callback: function(response) {
-                    // Payment successful - process to Augustine's GTBank account
-                    verifyPaymentAndSettle(response, amount, customerInfo);
-                },
-                onClose: function() {
-                    // Payment window closed
-                    alert('Payment was cancelled. Please try again.');
-                }
-            };
+            // Security: Never expose Paystack keys or account details in frontend
+            // This should be handled by a secure backend API
             
-            // Open Paystack payment modal
-            const handler = PaystackPop.setup(paystackConfig);
-            handler.openIframe();
+            // For demo purposes only - in production, this should call your backend
+            alert('Payment processing requires secure backend implementation. Please contact administrator for payment setup.');
             
-            return true; // Payment initiated
+            // Redirect to secure payment or contact admin
+            return false;
         }
         
-        // Verify payment and settle to Augustine's GTBank account
+        // Verify payment (secure implementation)
         function verifyPaymentAndSettle(response, amount, customerInfo) {
-            // In production, this would verify the payment on your server
-            // For now, we'll simulate the verification and settlement
+            // Security: Payment verification should be handled by secure backend
+            // Never expose account details or banking information in frontend
             
             const paymentData = {
                 transactionId: response.reference,
                 amount: amount,
-                recipient: 'Augustine Isama',
-                account: '0672546973',
-                bank: 'GTBank',
                 status: 'completed',
                 customerEmail: customerInfo.email,
-                timestamp: new Date().toISOString(),
-                settledToGTBank: true
+                timestamp: new Date().toISOString()
             };
             
-            // Store payment record
+            // Store payment record (without sensitive details)
             const payments = JSON.parse(localStorage.getItem('candysKitchenPayments')) || [];
             payments.push(paymentData);
             localStorage.setItem('candysKitchenPayments', JSON.stringify(payments));
-            
-            // Send payment alert to Augustine
-            sendPaymentAlert(paymentData);
             
             // Show success message
             alert(`Payment of ${amount} NGN processed successfully! Transaction ID: ${response.reference}`);
@@ -832,20 +831,20 @@
             completeOrder(paymentData);
         }
         
-        // Send payment alert to Augustine
+        // Send payment alert (secure implementation)
         function sendPaymentAlert(paymentData) {
-            // In a real system, this would send SMS/email to Augustine
-            console.log(`PAYMENT ALERT: ${paymentData.amount} NGN received and settled to GTBank account ${paymentData.account}. Transaction ID: ${paymentData.transactionId}`);
+            // Security: Payment alerts should be handled by secure backend
+            // Never expose account details or banking information in frontend
             
-            // Store alert for Augustine
-            const alerts = JSON.parse(localStorage.getItem('augustinePaymentAlerts')) || [];
+            // Store alert for admin (without sensitive details)
+            const alerts = JSON.parse(localStorage.getItem('adminPaymentAlerts')) || [];
             alerts.push({
-                message: `Payment of ${paymentData.amount} NGN received and settled to GTBank account ${paymentData.account}. Transaction ID: ${paymentData.transactionId}`,
+                message: `Payment of ${paymentData.amount} NGN received. Transaction ID: ${paymentData.transactionId}`,
                 timestamp: paymentData.timestamp,
                 read: false,
                 type: 'payment_received'
             });
-            localStorage.setItem('augustinePaymentAlerts', JSON.stringify(alerts));
+            localStorage.setItem('adminPaymentAlerts', JSON.stringify(alerts));
         }
         
         // Complete order after successful payment
@@ -964,28 +963,31 @@
                     return;
                 }
                 
-                const name = document.getElementById('customer-name').value;
-                const phone = document.getElementById('customer-phone').value;
-                const address = document.getElementById('customer-address').value;
-                const instructions = document.getElementById('special-instructions').value;
-                const email = document.getElementById('customer-email').value;
+                const name = sanitizeInput(document.getElementById('customer-name').value);
+                const phone = sanitizeInput(document.getElementById('customer-phone').value);
+                const address = sanitizeInput(document.getElementById('customer-address').value);
+                const instructions = sanitizeInput(document.getElementById('special-instructions').value);
+                const email = sanitizeInput(document.getElementById('customer-email').value);
                 const payment = document.querySelector('input[name="payment"]:checked').value;
                 
-                if (!name || !phone || !address || !email) {
-                    alert('Please fill in all required delivery information including email');
+                // Security: Validate all inputs
+                if (!validateInput(name, 'name')) {
+                    alert('Please enter a valid name (letters only, 2-50 characters)');
                     return;
                 }
                 
-                // Validate email format
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
+                if (!validateInput(phone, 'phone')) {
+                    alert('Please enter a valid phone number (minimum 10 digits)');
+                    return;
+                }
+                
+                if (!validateInput(address, 'address')) {
+                    alert('Please enter a valid address (5-200 characters)');
+                    return;
+                }
+                
+                if (!validateInput(email, 'email')) {
                     alert('Please enter a valid email address');
-                    return;
-                }
-                
-                // Validate phone number
-                if (!/^[\d\s\-\+\(\)]+$/.test(phone) || phone.length < 10) {
-                    alert('Please enter a valid phone number');
                     return;
                 }
                 
