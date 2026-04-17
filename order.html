@@ -932,6 +932,20 @@
             // User is logged in, continue with cart initialization
             renderCart();
             
+            // Payment method toggle functionality
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const cardDetails = document.getElementById('card-details');
+            
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardDetails.classList.remove('hidden');
+                    } else {
+                        cardDetails.classList.add('hidden');
+                    }
+                });
+            });
+            
             // Format card number input
             const cardNumberInput = document.getElementById('card-number');
             if (cardNumberInput) {
