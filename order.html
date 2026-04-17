@@ -877,6 +877,8 @@
         
         // Send WhatsApp order notification
         function sendWhatsAppNotification(order) {
+            console.log('sendWhatsAppNotification called with order:', order);
+            
             // Format order details for WhatsApp
             const orderItems = order.items.map(item => 
                 `${item.quantity}x ${item.name} - ${item.price}`
@@ -899,10 +901,21 @@
             
             // Replace with your WhatsApp number (without + and spaces)
             const phoneNumber = '2349037457567'; // User's WhatsApp number: 09037457567
+            console.log('WhatsApp phone number:', phoneNumber);
+            console.log('Message content:', decodeURIComponent(message));
             
             // Open WhatsApp with pre-filled message
             const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
-            window.open(whatsappUrl, '_blank');
+            console.log('WhatsApp URL:', whatsappUrl);
+            
+            try {
+                window.open(whatsappUrl, '_blank');
+                console.log('WhatsApp notification sent successfully');
+                alert('WhatsApp notification sent! Please check your WhatsApp.');
+            } catch (error) {
+                console.error('Error sending WhatsApp notification:', error);
+                alert('Failed to open WhatsApp. Please try again.');
+            }
         }
         
         // Complete order after successful payment
