@@ -843,6 +843,9 @@
         
         // Confirm payment function
         function confirmPayment(orderId, amount, customerName) {
+            // Get customer info before removing modal
+            const customerEmail = document.getElementById('customer-email')?.value || '';
+            
             // Remove payment modal
             const modal = document.querySelector('.fixed.inset-0');
             if (modal) {
@@ -855,7 +858,7 @@
                     transactionId: orderId,
                     amount: amount,
                     status: 'completed',
-                    customerEmail: document.getElementById('customer-email').value,
+                    customerEmail: customerEmail,
                     timestamp: new Date().toISOString()
                 };
                 
