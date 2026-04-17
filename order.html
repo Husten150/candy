@@ -1037,9 +1037,9 @@
                         return;
                     }
                     
-                    // Validate card number (19 digits)
-                    if (!/^\d{19}$/.test(cardNumber)) {
-                        alert('Please enter a valid 19-digit card number');
+                    // Validate card number (13-19 digits)
+                    if (!/^\d{13,19}$/.test(cardNumber)) {
+                        alert('Please enter a valid card number (13-19 digits)');
                         return;
                     }
                     
