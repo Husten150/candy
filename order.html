@@ -794,16 +794,84 @@
             checkoutBtn.disabled = cart.length === 0;
         }
 
-        // Process payment with Paystack (secure implementation)
+        // Process payment with Paystack (frontend implementation)
         function processPaymentToAugustine(amount, customerInfo) {
-            // Security: Never expose Paystack keys or account details in frontend
-            // This should be handled by a secure backend API
+            // Create a simulated payment confirmation for demo purposes
+            const orderId = 'CANDY_' + Date.now();
             
-            // For demo purposes only - in production, this should call your backend
-            alert('Payment processing requires secure backend implementation. Please contact administrator for payment setup.');
+            // Show payment confirmation modal
+            const paymentModal = document.createElement('div');
+            paymentModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            paymentModal.innerHTML = `
+                <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                    <div class="text-center">
+                        <i class="fas fa-credit-card text-purple-600 text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Secure Payment Processing</h3>
+                        <p class="text-gray-600 mb-4">Processing payment of ₦${amount} for ${customerInfo.name}</p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-sm text-yellow-800">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                <strong>Demo Mode:</strong> This is a simulated payment for testing purposes.
+                                In production, this will connect to real Paystack payment gateway.
+                            </p>
+                        </div>
+                        <div class="space-y-3">
+                            <button onclick="confirmPayment('${orderId}', ${amount}, '${customerInfo.name}')" 
+                                    class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition duration-300">
+                                <i class="fas fa-check mr-2"></i>Confirm Payment
+                            </button>
+                            <button onclick="cancelPayment()" 
+                                    class="w-full bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition duration-300">
+                                <i class="fas fa-times mr-2"></i>Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
             
-            // Redirect to secure payment or contact admin
-            return false;
+            document.body.appendChild(paymentModal);
+            
+            return true; // Payment initiated
+        }
+        
+        // Confirm payment function
+        function confirmPayment(orderId, amount, customerName) {
+            // Remove payment modal
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                const paymentData = {
+                    transactionId: orderId,
+                    amount: amount,
+                    status: 'completed',
+                    customerEmail: document.getElementById('customer-email').value,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Store payment record
+                const payments = JSON.parse(localStorage.getItem('candysKitchenPayments')) || [];
+                payments.push(paymentData);
+                localStorage.setItem('candysKitchenPayments', JSON.stringify(payments));
+                
+                // Show success message
+                alert(`Payment of ${amount} NGN processed successfully! Transaction ID: ${orderId}`);
+                
+                // Complete the order
+                completeOrder(paymentData);
+            }, 2000); // Simulate processing time
+        }
+        
+        // Cancel payment function
+        function cancelPayment() {
+            // Remove payment modal
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
         }
         
         // Verify payment (secure implementation)
