@@ -6,7 +6,7 @@
     <title>Your Order - Candy's Kitchen</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- Paystack script removed for testing - will be re-enabled later -->
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
@@ -545,56 +545,37 @@
             
             try {
                 if (paymentMethod === 'card') {
-                    // Process card payment with Paystack
-                    const totalText = document.getElementById('total').textContent;
-                    console.log('Total text:', totalText);
+                    // Mock card payment processing
+                    console.log('Processing mock card payment...');
                     
-                    const amount = Math.round(parseFloat(totalText.replace('₦', '').replace(/,/g, '')) * 100);
-                    console.log('Amount in kobo:', amount);
+                    // Simulate payment processing
+                    checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing Card Payment...';
                     
-                    // Check if Paystack is available and working
-                    if (typeof PaystackPop === 'undefined') {
-                        console.error('Paystack not available');
-                        showError('Payment gateway not available. Using cash on delivery instead.');
-                        completeOrder('COD-' + Date.now());
-                        return;
-                    }
-                    
-                    // Add additional check for Paystack functionality
-                    try {
-                        console.log('Testing Paystack availability...');
-                        // Test if PaystackPop.setup is a function
-                        if (typeof PaystackPop.setup !== 'function') {
-                            throw new Error('PaystackPop.setup is not a function');
-                        }
-                    } catch (testError) {
-                        console.error('Paystack test failed:', testError);
-                        showError('Payment gateway not working. Using cash on delivery instead.');
-                        completeOrder('COD-' + Date.now());
-                        return;
-                    }
-                    
-                    // Use a real Paystack test key
-                    const handler = PaystackPop.setup({
-                        key: 'pk_test_d8fa7e5d4d5ab3a6c5f4e3b2', // Real test key
-                        email: email,
-                        amount: amount,
-                        currency: 'NGN',
-                        ref: 'CANDY_' + Math.floor((Math.random() * 1000000000) + 1),
-                        callback: function(response) {
-                            console.log('Payment successful:', response);
-                            completeOrder(response.reference);
-                        },
-                        onClose: function() {
-                            console.log('Payment cancelled');
-                            checkoutBtn.disabled = false;
-                            checkoutBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Place Order';
-                            showError('Payment was cancelled. Please try again.');
-                        }
-                    });
-                    
-                    console.log('Opening Paystack payment...');
-                    handler.openIframe();
+                    // Simulate payment delay
+                    setTimeout(() => {
+                        // Generate mock payment reference
+                        const mockReference = 'MOCK_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+                        console.log('Mock payment successful:', mockReference);
+                        
+                        // Show success message
+                        const successDiv = document.createElement('div');
+                        successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in';
+                        successDiv.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span>Card payment processed successfully!</span>
+                            </div>
+                        `;
+                        document.body.appendChild(successDiv);
+                        
+                        // Remove success message after 3 seconds
+                        setTimeout(() => {
+                            successDiv.remove();
+                        }, 3000);
+                        
+                        // Complete the order
+                        completeOrder(mockReference);
+                    }, 2000); // 2 second delay to simulate processing
                     
                 } else {
                     // Cash on delivery - complete order directly
@@ -715,46 +696,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderCart();
             
-            // Wait a moment for Paystack to load
-            setTimeout(() => {
-                console.log('Checking Paystack availability...');
-                console.log('PaystackPop type:', typeof PaystackPop);
-                console.log('PaystackPop value:', PaystackPop);
-                
-                // Check if Paystack script loaded
-                if (typeof PaystackPop === 'undefined') {
-                    console.warn('Paystack not loaded, adding fallback');
-                    // Add fallback payment method
-                    const paymentOptions = document.querySelectorAll('input[name="payment"]');
-                    paymentOptions.forEach(option => {
-                        if (option.value === 'card') {
-                            option.disabled = true;
-                            option.parentElement.style.opacity = '0.5';
-                            option.parentElement.style.cursor = 'not-allowed';
-                        }
-                    });
-                    
-                    // Show warning message
-                    const warningDiv = document.createElement('div');
-                    warningDiv.className = 'bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4';
-                    warningDiv.innerHTML = `
-                        <div class="flex items-center">
-                            <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
-                            <div>
-                                <p class="text-sm font-semibold text-yellow-800">Payment Gateway Temporarily Unavailable</p>
-                                <p class="text-xs text-yellow-700">Card payments are currently unavailable. Please select "Cash on Delivery" to complete your order.</p>
-                            </div>
-                        </div>
-                    `;
-                    
-                    const paymentSection = document.querySelector('.mb-6');
-                    if (paymentSection) {
-                        paymentSection.insertBefore(warningDiv, paymentSection.firstChild);
-                    }
-                } else {
-                    console.log('Paystack is available for payments');
-                }
-            }, 2000); // Wait 2 seconds for script to load
+            console.log('Mock payment system initialized - all payment methods available');
             
             // Card number formatting
             const cardNumberInput = document.getElementById('card-number');
